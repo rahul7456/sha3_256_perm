@@ -4,12 +4,12 @@ X_AXIS = 5,
 Y_AXIS = 5,
 Z_AXIS = 64
 )(
-input  [Z_AXIS-1:0] a_theta_in  [X_AXIS-1:0][Y_AXIS-1:0],
-output [Z_AXIS-1:0] a_theta_out [X_AXIS-1:0][Y_AXIS-1:0],
+input  [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_theta_in,
+output [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_theta_out,
 );
 
-wire [Z_AXIS-1:0] c [X_AXIS-1:0];
-wire [Z_AXIS-1:0] d [X_AXIS-1:0];
+wire [X_AXIS-1:0][Z_AXIS-1:0] c;
+wire [X_AXIS-1:0][Z_AXIS-1:0] d;
 genvar i;
 generate
 for (i=0; i< X_AXIS-1; i=i+1)
