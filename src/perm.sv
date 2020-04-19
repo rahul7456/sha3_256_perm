@@ -1,8 +1,8 @@
 module perm 
 #(
-localparam X_AXIS = 5,
-           Y_AXIS = 5,
-           Z_AXIS = 64;
+parameter X_AXIS = 5,
+          Y_AXIS = 5,
+          Z_AXIS = 64
 )(
 input clk,
 input reset,
@@ -43,5 +43,10 @@ for (j=0; j<(X_AXIS-1); j=j+1) begin
    assign avec[j][4] = s[1280+64+(64*j)-1:1280+(64*j)];
 end
 endgenerate
+
+perm_theta #(X_AXIS, Y_AXIS, Z_AXIS) (
+.a_theta_in  (avec),
+.a_theta_out ()
+);
 
 endmodule

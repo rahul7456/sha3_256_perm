@@ -1,4 +1,6 @@
-function mod5(input [2:0] a);
+function mod5(
+input [2:0] a
+);
 reg [2:0] temp;
 temp = a%5;
 if(temp < 0)
@@ -7,11 +9,13 @@ else
    mod5 = temp;
 endfunction
 
-function mod64(input [127:0] a);
+function mod64(
+input [127:0] a
+);
 reg [127:0] temp;
 temp = a%64;
 if(temp < 0)
-   mod5 = temp + 64;
+   mod64 = temp + 64;
 else
-   mod5 = temp;
+   mod64 = temp;
 endfunction
