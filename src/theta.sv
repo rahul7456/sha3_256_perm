@@ -5,9 +5,9 @@ Y_AXIS = 5,
 Z_AXIS = 64
 )(
 input  [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_theta_in,
-output [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_theta_out,
+output [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_theta_out
 );
-`include "func.sv"
+`include "../src/func.sv"
 
 wire [X_AXIS-1:0][Z_AXIS-1:0] c;
 wire [X_AXIS-1:0][Z_AXIS-1:0] d;
@@ -40,7 +40,7 @@ generate
 for(m=0;m<Y_AXIS;m=m+1) begin
    for(n=0;n<X_AXIS;n=n+1) begin
       for(o=0;o<Z_AXIS;o=o+1) begin
-assign a_theta_out = a_theta_in[n,m,o] ^ d[n][o];
+assign a_theta_out = a_theta_in[n][m][o] ^ d[n][o];
       end
    end
 end
@@ -54,7 +54,5 @@ endgenerate
 //
 //d[0][0]=c[4][0] ^ c[1][63]
 //d[0][1]=c[4][1] ^ c[1][63]
-
-
 
 endmodule
