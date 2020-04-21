@@ -55,9 +55,10 @@ endgenerate
 //end
 //endgenerate
 
-perm_theta #(X_AXIS, Y_AXIS, Z_AXIS) (
+perm_theta #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_theta (
 .a_theta_in  (avec),
 .a_theta_out ()
 );
+
 
 endmodule
