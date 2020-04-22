@@ -17,7 +17,8 @@ output pushout
 );
 
 reg [1599:0] s;
-reg [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] avec;
+reg  [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] avec;
+wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_theta_out;
 
 genvar i;
 generate
@@ -44,21 +45,33 @@ assign avec[x][y][z] = s[64*(5*y+x)+z];
 end
 endgenerate
 
-//genvar j;
-//generate
-//for (j=0; j<(X_AXIS-1); j=j+1) begin
-//   assign avec[j][0] = s[64+(64*j)-1:64*j];
-//   assign avec[j][1] = s[320+64+(64*j)-1:320+(64*j)];
-//   assign avec[j][2] = s[640+64+(64*j)-1:640+(64*j)];
-//   assign avec[j][3] = s[960+64+(64*j)-1:960+(64*j)];
-//   assign avec[j][4] = s[1280+64+(64*j)-1:1280+(64*j)];
-//end
-//endgenerate
-
 perm_theta #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_theta (
 .a_theta_in  (avec),
-.a_theta_out ()
+.a_theta_out (a_theta_out)
 );
+
+
+////// Remove for SYNTHESIS
+initial begin
+   wait(pushin && (dix == 7));
+      $display("A");
+      $display("%h %h %h %h %h",avec[0][0],avec[1][0],avec[2][0],avec[3][0],avec[4][0]);
+      $display("%h %h %h %h %h",avec[0][1],avec[1][1],avec[2][1],avec[3][1],avec[4][1]);
+      $display("%h %h %h %h %h",avec[0][2],avec[1][2],avec[2][2],avec[3][2],avec[4][2]);
+      $display("%h %h %h %h %h",avec[0][3],avec[1][3],avec[2][3],avec[3][3],avec[4][3]);
+      $display("%h %h %h %h %h",avec[0][4],avec[1][4],avec[2][4],avec[3][4],avec[4][4]);
+end
+
+initial begin
+   wait(pushin && (dix == 7));
+      $display("A Theta Out");
+      $display("%h %h %h %h %h",a_theta_out[0][0],a_theta_out[1][0],a_theta_out[2][0],a_theta_out[3][0],a_theta_out[4][0]);
+      $display("%h %h %h %h %h",a_theta_out[0][1],a_theta_out[1][1],a_theta_out[2][1],a_theta_out[3][1],a_theta_out[4][1]);
+      $display("%h %h %h %h %h",a_theta_out[0][2],a_theta_out[1][2],a_theta_out[2][2],a_theta_out[3][2],a_theta_out[4][2]);
+      $display("%h %h %h %h %h",a_theta_out[0][3],a_theta_out[1][3],a_theta_out[2][3],a_theta_out[3][3],a_theta_out[4][3]);
+      $display("%h %h %h %h %h",a_theta_out[0][4],a_theta_out[1][4],a_theta_out[2][4],a_theta_out[3][4],a_theta_out[4][4]);
+end
+////// Remove for SYNTHESIS
 
 
 endmodule
