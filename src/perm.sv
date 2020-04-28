@@ -19,6 +19,7 @@ output pushout
 reg [1599:0] s;
 reg  [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] avec;
 wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_theta_out;
+wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_rho_out;
 
 genvar i;
 generate
@@ -50,6 +51,12 @@ perm_theta #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_theta (
 .a_theta_out (a_theta_out)
 );
 
+perm_rho #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_rho (
+.a_rho_in  (a_theta_out),
+.a_rho_out (a_rho_out)
+//.curr_stage(5'h0)
+);
+
 
 ////// Remove for SYNTHESIS
 initial begin
@@ -70,6 +77,16 @@ initial begin
       $display("%h %h %h %h %h",a_theta_out[0][2],a_theta_out[1][2],a_theta_out[2][2],a_theta_out[3][2],a_theta_out[4][2]);
       $display("%h %h %h %h %h",a_theta_out[0][3],a_theta_out[1][3],a_theta_out[2][3],a_theta_out[3][3],a_theta_out[4][3]);
       $display("%h %h %h %h %h",a_theta_out[0][4],a_theta_out[1][4],a_theta_out[2][4],a_theta_out[3][4],a_theta_out[4][4]);
+end
+
+initial begin
+   wait(pushin && (dix == 7));
+      $display("A Rho Out");
+      $display("%h %h %h %h %h",a_rho_out[0][0],a_rho_out[1][0],a_rho_out[2][0],a_rho_out[3][0],a_rho_out[4][0]);
+      $display("%h %h %h %h %h",a_rho_out[0][1],a_rho_out[1][1],a_rho_out[2][1],a_rho_out[3][1],a_rho_out[4][1]);
+      $display("%h %h %h %h %h",a_rho_out[0][2],a_rho_out[1][2],a_rho_out[2][2],a_rho_out[3][2],a_rho_out[4][2]);
+      $display("%h %h %h %h %h",a_rho_out[0][3],a_rho_out[1][3],a_rho_out[2][3],a_rho_out[3][3],a_rho_out[4][3]);
+      $display("%h %h %h %h %h",a_rho_out[0][4],a_rho_out[1][4],a_rho_out[2][4],a_rho_out[3][4],a_rho_out[4][4]);
 end
 ////// Remove for SYNTHESIS
 
