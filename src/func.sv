@@ -1,5 +1,5 @@
-function [3:0] mod5(
-input signed [3:0] a
+function [5:0] mod5(
+input signed [5:0] a
 );
 mod5 = (a%5<0)?(a%5+5):a%5;
 endfunction

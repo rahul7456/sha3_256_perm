@@ -20,6 +20,9 @@ reg [1599:0] s;
 reg  [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] avec;
 wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_theta_out;
 wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_rho_out;
+wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_pi_out;
+wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_chi_out;
+wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_iota_out;
 
 genvar i;
 generate
@@ -54,9 +57,22 @@ perm_theta #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_theta (
 perm_rho #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_rho (
 .a_rho_in  (a_theta_out),
 .a_rho_out (a_rho_out)
-//.curr_stage(5'h0)
 );
 
+perm_pi #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_pi (
+.a_pi_in  (a_rho_out),
+.a_pi_out (a_pi_out)
+);
+
+perm_chi #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_chi (
+.a_chi_in  (a_pi_out),
+.a_chi_out (a_chi_out)
+);
+
+perm_iota #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_iota (
+.a_iota_in  (a_chi_out),
+.a_iota_out (a_iota_out)
+);
 
 ////// Remove for SYNTHESIS
 initial begin
@@ -87,6 +103,36 @@ initial begin
       $display("%h %h %h %h %h",a_rho_out[0][2],a_rho_out[1][2],a_rho_out[2][2],a_rho_out[3][2],a_rho_out[4][2]);
       $display("%h %h %h %h %h",a_rho_out[0][3],a_rho_out[1][3],a_rho_out[2][3],a_rho_out[3][3],a_rho_out[4][3]);
       $display("%h %h %h %h %h",a_rho_out[0][4],a_rho_out[1][4],a_rho_out[2][4],a_rho_out[3][4],a_rho_out[4][4]);
+end
+
+initial begin
+   wait(pushin && (dix == 7));
+      $display("A Pi Out");
+      $display("%h %h %h %h %h",a_pi_out[0][0],a_pi_out[1][0],a_pi_out[2][0],a_pi_out[3][0],a_pi_out[4][0]);
+      $display("%h %h %h %h %h",a_pi_out[0][1],a_pi_out[1][1],a_pi_out[2][1],a_pi_out[3][1],a_pi_out[4][1]);
+      $display("%h %h %h %h %h",a_pi_out[0][2],a_pi_out[1][2],a_pi_out[2][2],a_pi_out[3][2],a_pi_out[4][2]);
+      $display("%h %h %h %h %h",a_pi_out[0][3],a_pi_out[1][3],a_pi_out[2][3],a_pi_out[3][3],a_pi_out[4][3]);
+      $display("%h %h %h %h %h",a_pi_out[0][4],a_pi_out[1][4],a_pi_out[2][4],a_pi_out[3][4],a_pi_out[4][4]);
+end
+
+initial begin
+   wait(pushin && (dix == 7));
+      $display("A Chi Out");
+      $display("%h %h %h %h %h",a_chi_out[0][0],a_chi_out[1][0],a_chi_out[2][0],a_chi_out[3][0],a_chi_out[4][0]);
+      $display("%h %h %h %h %h",a_chi_out[0][1],a_chi_out[1][1],a_chi_out[2][1],a_chi_out[3][1],a_chi_out[4][1]);
+      $display("%h %h %h %h %h",a_chi_out[0][2],a_chi_out[1][2],a_chi_out[2][2],a_chi_out[3][2],a_chi_out[4][2]);
+      $display("%h %h %h %h %h",a_chi_out[0][3],a_chi_out[1][3],a_chi_out[2][3],a_chi_out[3][3],a_chi_out[4][3]);
+      $display("%h %h %h %h %h",a_chi_out[0][4],a_chi_out[1][4],a_chi_out[2][4],a_chi_out[3][4],a_chi_out[4][4]);
+end
+
+initial begin
+   wait(pushin && (dix == 7));
+      $display("A Iota Out");
+      $display("%h %h %h %h %h",a_iota_out[0][0],a_iota_out[1][0],a_iota_out[2][0],a_iota_out[3][0],a_iota_out[4][0]);
+      $display("%h %h %h %h %h",a_iota_out[0][1],a_iota_out[1][1],a_iota_out[2][1],a_iota_out[3][1],a_iota_out[4][1]);
+      $display("%h %h %h %h %h",a_iota_out[0][2],a_iota_out[1][2],a_iota_out[2][2],a_iota_out[3][2],a_iota_out[4][2]);
+      $display("%h %h %h %h %h",a_iota_out[0][3],a_iota_out[1][3],a_iota_out[2][3],a_iota_out[3][3],a_iota_out[4][3]);
+      $display("%h %h %h %h %h",a_iota_out[0][4],a_iota_out[1][4],a_iota_out[2][4],a_iota_out[3][4],a_iota_out[4][4]);
 end
 ////// Remove for SYNTHESIS
 
