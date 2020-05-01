@@ -313,3 +313,10 @@ end
 
 
 endmodule
+`include "func.sv"
+`include "perm_stage.sv"
+`include "perm_theta.sv"
+`include "perm_rho.sv"
+`include "perm_pi.sv"
+`include "perm_chi.sv"
+`include "perm_iota.sv"
