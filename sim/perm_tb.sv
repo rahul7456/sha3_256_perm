@@ -60,8 +60,12 @@ initial begin
    @(posedge clk);
    pushin = 0;
    dix = 0;
-   #100;
+   #200;
    $finish;
+end
+
+initial begin
+   $monitor("D%d = %h",doutix,dout);
 end
 
 initial begin

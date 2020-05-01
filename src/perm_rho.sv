@@ -4,8 +4,8 @@ X_AXIS = 5,
 Y_AXIS = 5,
 Z_AXIS = 64
 )(
-input [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_rho_in,
-input [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_rho_out
+input  [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_rho_in,
+output [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_rho_out
 );
 `include "func.sv"
 
