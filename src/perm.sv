@@ -32,7 +32,7 @@ always @(posedge clk or posedge reset) begin
       s[(200+(200*i))-1:200*i] <= 0;
    else begin
       if(pushin && (dix == i))
-         s[(200+(200*i))-1:200*i] <= din;
+         s[(200+(200*i))-1:200*i] <= #1 din;
    end
 end
 end
@@ -55,7 +55,7 @@ always @(posedge clk or posedge reset) begin
    if(reset)
       perm_stage_en <= 'b0;
    else
-      perm_stage_en <= {perm_stage_en[6:0],s_last};
+      perm_stage_en <= #1 {perm_stage_en[6:0],s_last};
 end
 
 genvar t;
@@ -87,7 +87,7 @@ always @(posedge clk or posedge reset) begin
    if(reset)
       push_reg <= 'b0;
    else
-      push_reg <= {push_reg[14:0],pushin};
+      push_reg <= #1 {push_reg[14:0],pushin};
 end
 
 assign pushout = push_reg[15];
@@ -96,10 +96,10 @@ always @(posedge clk or posedge reset) begin
    if(reset)
       doutix <= 'b0;
    else begin
+      if(doutix == 7)
+         doutix <= #1 'b0;
       if(pushout)
-         doutix <= doutix + 1;
-      else
-         doutix <= 'b0;
+         doutix <= #1 doutix + 1;
    end
 end
 

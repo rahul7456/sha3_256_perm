@@ -61,7 +61,7 @@ always @(posedge clk or posedge reset) begin
       a_stage_out <= 'b0;
    else begin
       if(stage_en)
-         a_stage_out <= a_iota_out[2];
+         a_stage_out <= #1 a_iota_out[2];
    end
 end
 
