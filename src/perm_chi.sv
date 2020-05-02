@@ -9,13 +9,13 @@ Z_AXIS = 64
 
   genvar i,j,k;
   generate
-    for(i=0;i<X_AXIS;i=i+1) begin
-      for(j=0;j<Y_AXIS;j=j+1)begin
-        for(k=0;k<Z_AXIS;k=k+1) begin
+    for(i=0;i<X_AXIS;i=i+1) begin: gen_a_chi_out_x
+      for(j=0;j<Y_AXIS;j=j+1)begin: gen_a_chi_out_y
+        for(k=0;k<Z_AXIS;k=k+1) begin: gen_a_chi_out_z
           assign  a_chi_out[i][j][k]=(a_chi_in[i][j][k]^((a_chi_in[mod5(i+1)][j][k]^1)*a_chi_in[mod5(i+2)][j][k]));
-        end
-      end
-    end
+        end: gen_a_chi_out_z
+      end: gen_a_chi_out_y
+    end: gen_a_chi_out_x
   endgenerate
   
 endmodule

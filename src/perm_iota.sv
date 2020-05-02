@@ -14,14 +14,14 @@ input  [31:0] perm_num
 
 genvar i, j, k;
 generate
-for(i=0;i<X_AXIS;i=i+1) begin
-   for(j=0;j<Y_AXIS;j=j+1) begin
+for(i=0;i<X_AXIS;i=i+1) begin: gen_a_iota_out_x
+   for(j=0;j<Y_AXIS;j=j+1) begin: gen_a_iota_out_y
       if(i == 0 && j == 0)
 assign a_iota_out[0][0] = a_iota_in[0][0] ^ rc(perm_num);
       else
 assign a_iota_out[i][j] = a_iota_in[i][j];
-   end
-end
+   end: gen_a_iota_out_y
+end: gen_a_iota_out_x
 endgenerate
 
 endmodule

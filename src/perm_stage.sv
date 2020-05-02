@@ -20,7 +20,7 @@ wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_iota_out [2:0];
 
 genvar i;
 generate
-for(i=0;i<3;i=i+1) begin
+for(i=0;i<3;i=i+1) begin: gen_perm_stage
 if(i == 0) begin
 perm_theta #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_theta (
 .a_theta_in  (a_stage_in),
@@ -53,7 +53,7 @@ perm_iota #(X_AXIS, Y_AXIS, Z_AXIS) u_perm_iota (
 .a_iota_out (a_iota_out[i]),
 .perm_num   (3*perm_stage+i)
 );
-end
+end: gen_perm_stage
 endgenerate
 
 always @(posedge clk or posedge reset) begin

@@ -37,6 +37,9 @@ initial begin
    pushin = 1;
    dix = 2;
    din = 0;
+   @(posedge clk); //
+   pushin = 0;//
+   @(posedge clk);//
    @(posedge clk);
    pushin = 1;
    dix = 3;

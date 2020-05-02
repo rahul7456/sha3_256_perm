@@ -13,7 +13,7 @@ input  pushin,
 
 output reg [2:0] doutix,
 output reg [199:0] dout,
-output pushout
+output reg pushout
 );
 
 reg [1599:0] s;
@@ -21,12 +21,11 @@ reg  [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] avec;
 wire [X_AXIS-1:0][Y_AXIS-1:0][Z_AXIS-1:0] a_stage_out [7:0];
 
 reg  [7:0]  perm_stage_en;
-reg  [15:0] push_reg;
 wire [1599:0] s_out;
 
 genvar i;
 generate
-for (i=0; i<8; i=i+1) begin
+for (i=0; i<8; i=i+1) begin: gen_s
 always @(posedge clk or posedge reset) begin
    if(reset)
       s[(200+(200*i))-1:200*i] <= 0;
@@ -35,18 +34,18 @@ always @(posedge clk or posedge reset) begin
          s[(200+(200*i))-1:200*i] <= #1 din;
    end
 end
-end
+end: gen_s
 endgenerate
 
 genvar x,y,z;
 generate
-for(x=0;x<X_AXIS;x=x+1) begin
-   for(y=0;y<Y_AXIS;y=y+1) begin
-      for(z=0;z<Z_AXIS;z=z+1) begin
+for(x=0;x<X_AXIS;x=x+1) begin: gen_avec_x
+   for(y=0;y<Y_AXIS;y=y+1) begin: gen_avec_y
+      for(z=0;z<Z_AXIS;z=z+1) begin: gen_avec_z
 assign avec[x][y][z] = s[64*(5*y+x)+z];
-      end
-   end
-end
+      end: gen_avec_z
+   end: gen_avec_y
+end: gen_avec_x
 endgenerate
 
 assign s_last = ((dix == 7) && pushin);
@@ -60,7 +59,7 @@ end
 
 genvar t;
 generate
-for(t=0;t<8;t=t+1) begin
+for(t=0;t<8;t=t+1) begin: gen_perm_stage
 if(t==0) begin
 perm_stage u_perm_stage (
    .clk(clk),
@@ -80,17 +79,19 @@ perm_stage u_perm_stage (
    .perm_stage(t)
 );
 end
-end
+end: gen_perm_stage
 endgenerate
 
 always @(posedge clk or posedge reset) begin
    if(reset)
-      push_reg <= 'b0;
-   else
-      push_reg <= #1 {push_reg[14:0],pushin};
+      pushout <= 'b0;
+   else begin
+      if(perm_stage_en[7])
+         pushout <= #1 1'b1;
+      else if(doutix == 7)
+         pushout <= #1 1'b0;
+   end
 end
-
-assign pushout = push_reg[15];
 
 always @(posedge clk or posedge reset) begin
    if(reset)
@@ -98,20 +99,20 @@ always @(posedge clk or posedge reset) begin
    else begin
       if(doutix == 7)
          doutix <= #1 'b0;
-      if(pushout)
+      else if(pushout)
          doutix <= #1 doutix + 1;
    end
 end
 
 genvar m,n,o;
 generate
-for(m=0;m<X_AXIS;m=m+1) begin
-   for(n=0;n<Y_AXIS;n=n+1) begin
-      for(o=0;o<Z_AXIS;o=o+1) begin
+for(m=0;m<X_AXIS;m=m+1) begin: gen_s_out_x
+   for(n=0;n<Y_AXIS;n=n+1) begin: gen_s_out_y
+      for(o=0;o<Z_AXIS;o=o+1) begin: gen_s_out_z
 assign s_out[64*(5*n+m)+o] = a_stage_out[7][m][n][o];
-      end
-   end
-end
+      end: gen_s_out_z
+   end: gen_s_out_y
+end: gen_s_out_x
 endgenerate
 
 always @*

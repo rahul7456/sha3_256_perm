@@ -39,13 +39,13 @@ assign t_offset[4][4] = 9'd78;
 
 genvar i, j, k;
 generate
-for(i=0;i<X_AXIS;i=i+1) begin
-   for(j=0;j<Y_AXIS;j=j+1) begin
-      for(k=0;k<Z_AXIS;k=k+1) begin
+for(i=0;i<X_AXIS;i=i+1) begin: gen_a_rho_out_x
+   for(j=0;j<Y_AXIS;j=j+1) begin: gen_a_rho_out_y
+      for(k=0;k<Z_AXIS;k=k+1) begin: gen_a_rho_out_z
 assign a_rho_out[i][j][k] = a_rho_in[i][j][mod64(k-t_offset[i][j])];
-      end
-   end
-end
+      end: gen_a_rho_out_z
+   end: gen_a_rho_out_y
+end: gen_a_rho_out_x
 endgenerate
 
 endmodule
