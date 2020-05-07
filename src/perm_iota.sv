@@ -6,6 +6,7 @@ input  [31:0] perm_num
 );
 `include "func.sv"
 
+// EXOR the 0,0 input vector with the Round Constant based on the number of permutation(0 to 23)
 genvar i, j, k;
 generate
 for(i=0;i<5;i=i+1) begin: gen_a_iota_out_x

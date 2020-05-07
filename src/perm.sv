@@ -1,3 +1,22 @@
+// This module is implementation of sha3-256 hashing.
+// The input comes in a burst of 8 din( each of 200 bits) along with dix and valid pushin.
+//
+// After all of 1600 bits comes in, total of 24 permutation is performed.
+// 24 permutations are divided into 8 parts, and every 3 permutation is performed in one cycle.
+//
+// After the permutations, the 3 dimentional vector is coverted into 1600 bits,
+// which are further pushed out in a burst of 8 datas (each of 200 bits) along with doutix and valid pushout.
+// The latency from the last din received to the first last dout given out is 16 cycles.
+// Design can handle bubbles between the input data burst, but provides the output data back to back.
+//
+// Each permutation comprises of following algorithms:
+// Algorithm 1: Theta
+// Algorithm 2: Rho
+// Algorithm 3: Pi
+// Algorithm 4: Chi
+// Algorithm 5: Round Constant
+// Algorithm 6: XOR with RC
+
 module perm 
 (
 input clk,
@@ -20,6 +39,8 @@ wire s_last;
 reg  [7:0]  perm_stage_en;
 wire [1599:0] s_out;
 
+// Push inital din until dix == 7.
+// Store all the din in 1600 bits of string s.
 genvar i;
 generate
 for (i=0; i<8; i=i+1) begin: gen_s
@@ -34,6 +55,7 @@ end
 end: gen_s
 endgenerate
 
+// Convert 1600 bits of string to vector avec
 genvar x,y,z;
 generate
 for(x=0;x<5;x=x+1) begin: gen_avec_x
@@ -45,15 +67,21 @@ assign avec[x][y][z] = s[64*(5*y+x)+z];
 end: gen_avec_x
 endgenerate
 
+// Detect the last din
 assign s_last = ((dix == 3'd7) && pushin);
 
+// perm does 3 levels of permutations in each cycle (called a stage). Total of 8 stages.
+// perm_stage_en is the enable to the perm_stage module for each stage
 always @(posedge clk or posedge reset) begin
    if(reset)
       perm_stage_en <= 'b0;
    else
       perm_stage_en <= #1 {perm_stage_en[6:0],s_last};
 end
-
+// Instantiation of 8 perm_stages, each containing 3 level of permutation.
+// Inputs are stage_en and vector a.
+// Output after 3 permutations will be in next clock cycle.
+// The output of one perm_stage will be input to next perm_stage.
 genvar t;
 generate
 for(t=0;t<8;t=t+1) begin: gen_perm_stage
@@ -79,6 +107,7 @@ end
 end: gen_perm_stage
 endgenerate
 
+// Convert the last pulse of perm_stage_en to 8 pushouts, going out along with doutix and dout.
 always @(posedge clk or posedge reset) begin
    if(reset)
       pushout <= 1'b0;
@@ -90,6 +119,7 @@ always @(posedge clk or posedge reset) begin
    end
 end
 
+// Generate doutix on pushout
 always @(posedge clk or posedge reset) begin
    if(reset)
       doutix <= 'b0;
@@ -101,6 +131,7 @@ always @(posedge clk or posedge reset) begin
    end
 end
 
+// Convert the a vector from the last stage of perm_stage into string s_out
 genvar m,n,o;
 generate
 for(m=0;m<5;m=m+1) begin: gen_s_out_x
@@ -112,6 +143,7 @@ assign s_out[64*(5*n+m)+o] = a_stage_out[7][m][n][o];
 end: gen_s_out_x
 endgenerate
 
+// Part selection of s_out to dout based on doutix.
 always @*
 begin
    case(doutix)

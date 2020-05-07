@@ -1,3 +1,6 @@
+// The input data comes in along with stage_en.
+// The data goes through 3 levels of permutations, combiationally.
+// The output of third permutation is provided in next clock cycle.
 module perm_stage
 (
 input  clk,

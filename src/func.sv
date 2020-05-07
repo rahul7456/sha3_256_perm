@@ -1,15 +1,21 @@
 function automatic [5:0] mod5(
 input signed [5:0] a
 );
+// In verilog modulo of negative number is a negative number, unlike C.
+// 5 is added to make it positive.
 mod5 = (a%5<0)?(a%5+5):a%5;
 endfunction
 
 function automatic [127:0] mod64(
 input signed [127:0] a
 );
+// In verilog modulo of negative number is a negative number, unlike C.
+// 64 is added to make it positive.
 mod64 = (a%64<0)?(a%64+64):a%64;
 endfunction
 
+// Calculate Round Constant(Algorithm 5). Taken from web.
+// Input is number of permutation.
 function automatic [63:0] rc(
 input integer a
 );
